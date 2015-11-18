@@ -1,0 +1,25 @@
+{
+    "name": "pg-compare",
+    "version": "0.1.0",
+    "description": "PostgreSQL DDL comparing tool",
+    "keywords": ["pg", "delta", "diff", "ddl", "compare"],
+    "url": "http://github.com/ambrogio-dev/pg-compare",
+    "author": "Simone Sanfratello <simone.sanfra@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/ambrogio-dev/pg-compare.git"
+    },
+    "engines": {
+        "node": ">= 0.12.x"
+    },
+    "files": ["bin/main.js"],
+    "dependencies": {
+        "pg": "x",
+        "a-toolbox": "x"
+    },
+    "bin": {
+        "pg-compare": "./bin/main.js"
+    },    
+    "preferGlobal": true
+}

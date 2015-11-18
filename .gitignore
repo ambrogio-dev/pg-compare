@@ -1,0 +1,9 @@
+#dirs
+/node_modules/
+/nbproject/
+
+npm-debug.log
+
+*Thumbs.db
+*.DS_Store
+.*.swp
