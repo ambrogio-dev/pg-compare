@@ -4,6 +4,11 @@ PostgreSQL DDL comparing tool
 [![NPM Version](http://img.shields.io/npm/v/pg-compare.svg?style=flat)](https://www.npmjs.org/package/pg-compare)
 [![NPM Downloads](https://img.shields.io/npm/dm/pg-compare.svg?style=flat)](https://www.npmjs.org/package/pg-compare)
 
+#### Why another diff-tool?
+
+There are many db-diffence tools, but all the open source tools are incomplete or abandoned, 
+and we need an up-to-date tool for quickly do this operation, in a single command line step.
+
 ## Npm Installation
 
 Install globally prefered
@@ -17,6 +22,14 @@ $ npm i -g pg-compare
 ```
 $ pg-compare ...
 ```
+
+### Test
+
+Tested on PostgreSQL 9.4
+
+### Collaborate
+
+Please feel free to report feedback or bugs or ask for new features.
 
 ## License
 
