@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Devel",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/bin/main.js",
+      "stopOnEntry": false,
+      "args": [
+        "example.json"
+      ],
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": [
+        "--nolazy"
+      ]
+    }
+  ]
+}

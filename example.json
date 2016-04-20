@@ -1,0 +1,32 @@
+{
+  "connection1": { 
+    "host": "10.20.6.22",
+    "user": "alatini",
+    "password": "devdevdev",
+    "database": "yn-dev3"
+  },
+  "connection2": { 
+    "host": "10.20.6.22",
+    "user": "pfusi",
+    "password": "devdevdev",
+    "database": "yn-dev2"
+  },
+  "compare": {
+    "schema": {
+      "tables": true, 
+      "fkeys": true, 
+      "functions": true, 
+      "indexes": true, 
+      "types": true, 
+      "views": true,
+      "sequences": true,
+      "rows":  ["grants_gr"]
+    },
+    "options": {
+      "mode": "full", 
+      "owner": "pfusi"  
+    }
+  },
+  "output": "/tmp/delta.sql", 
+  "verbose": false 
+}  
