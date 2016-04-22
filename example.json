@@ -19,8 +19,7 @@
       "indexes": true, 
       "types": true, 
       "views": true,
-      "sequences": true,
-      "rows":  ["grants_gr"]
+      "sequences": true
     },
     "options": {
       "mode": "full", 

@@ -18,6 +18,9 @@
         "pg": "x",
         "a-toolbox": "x"
     },
+    "devDependencies": {
+      "istanbul": "x"
+    },
     "bin": {
         "pg-compare": "./bin/main.js"
     },    
