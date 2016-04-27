@@ -5,6 +5,10 @@
     "keywords": ["pg", "delta", "diff", "ddl", "compare"],
     "url": "http://github.com/ambrogio-dev/pg-compare",
     "author": "Simone Sanfratello <simone.sanfra@gmail.com>",
+    "contributors": [{
+      "name": "Andrea Latini",
+      "email": "superlat@hotmail.it"
+    }],
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -13,7 +17,7 @@
     "engines": {
         "node": ">= 0.12.x"
     },
-    "files": ["bin/main.js"],
+    "files": ["bin/main.js", "example.json", "test.js", "lib/"],
     "dependencies": {
         "pg": "x",
         "a-toolbox": "x"
@@ -24,5 +28,8 @@
     "bin": {
         "pg-compare": "./bin/main.js"
     },    
+    "scripts": {
+      "test": "node test.js"
+    },
     "preferGlobal": true
 }

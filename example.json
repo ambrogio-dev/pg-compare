@@ -7,9 +7,9 @@
   },
   "connection2": { 
     "host": "10.20.6.22",
-    "user": "pfusi",
+    "user": "alatini",
     "password": "devdevdev",
-    "database": "yn-dev2"
+    "database": "test-compare2"
   },
   "compare": {
     "schema": {
@@ -22,10 +22,10 @@
       "sequences": true
     },
     "options": {
-      "mode": "full", 
-      "owner": "pfusi"  
+      "mode": "full",
+      "owner": "postgres"  
     }
   },
   "output": "/tmp/delta.sql", 
-  "verbose": false 
+  "verbose": true 
 }  
