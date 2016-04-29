@@ -5,7 +5,7 @@
       "name": "Devel",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/test.js",
+      "program": "${workspaceRoot}/bin/main.js",
       "stopOnEntry": false,
       "args": [
         "example.json"

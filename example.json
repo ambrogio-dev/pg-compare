@@ -1,15 +1,15 @@
 {
   "connection1": { 
-    "host": "10.20.6.22",
-    "user": "alatini",
-    "password": "devdevdev",
-    "database": "yn-dev3"
+    "host": "xxx.xxx.xxx.xxx",
+    "user": "username1",
+    "password": "password1",
+    "database": "dbname1"
   },
   "connection2": { 
-    "host": "10.20.6.22",
-    "user": "alatini",
-    "password": "devdevdev",
-    "database": "test-compare2"
+    "host": "xxx.xxx.xxx.xxx",
+    "user": "username2",
+    "password": "password2",
+    "database": "dbname2"
   },
   "compare": {
     "schema": {

@@ -20,7 +20,9 @@
     "files": ["bin/main.js", "example.json", "test.js", "lib/"],
     "dependencies": {
         "pg": "x",
-        "a-toolbox": "x"
+        "a-toolbox": "x",
+        "async": "x",
+        "orchestrator": "x"
     },
     "devDependencies": {
       "istanbul": "x"

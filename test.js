@@ -1,21 +1,22 @@
 var tools = require('a-toolbox')
 var pg = require('pg')
+var async = require('async')
 
-var DbCompare = require('./lib/DbCompare')
+var Compare = require('./lib/Compare')
 
 // / template of configuration parameters
 var configTemplate = {
   'connection1': {
-    'host': '10.20.6.22',
-    'user': 'alatini',
-    'password': 'devdevdev',
-    'database': 'test-compare1'
+    'host': 'xxx.xxx.xxx.xxx',
+    'user': 'username1',
+    'password': 'username1',
+    'database': 'dbname1'
   },
   'connection2': {
-    'host': '10.20.6.22',
-    'user': 'alatini',
-    'password': 'devdevdev',
-    'database': 'test-compare2'
+    'host': 'xxx.xxx.xxx.xxx',
+    'user': 'username2',
+    'password': 'username2',
+    'database': 'dbname2'
   },
   'compare': {
     'schema': {
@@ -29,7 +30,7 @@ var configTemplate = {
     },
     'options': {
       'mode': 'full',
-      'owner': 'alatini'
+      'owner': 'owner'
     }
   },
   'output': '/tmp/delta.sql',
@@ -40,7 +41,7 @@ var configTemplate = {
 var _successCount = 0
 var _errorCount = 0
 
-var dbCompare = new DbCompare()
+var compare = new Compare()
 
 /**
  * Try to pass a config file with a wrong json format
@@ -49,7 +50,7 @@ var dbCompare = new DbCompare()
  */
 var testWrongJson = function (next) {
   console.log('testWrongJson executing')
-  dbCompare.run({a: 1}, function (err) {
+  compare.run({a: 1}, function (err) {
     if (err) {
       console.log('testWrongJson success')
       _successCount++
@@ -70,7 +71,7 @@ var testMissingConnection1 = function (next) {
   console.log('testMissingConnection1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1 = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingConnection1 success')
       _successCount++
@@ -91,7 +92,7 @@ var testMissingConnection2 = function (next) {
   console.log('testMissingConnection2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2 = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingConnection2 success')
       _successCount++
@@ -112,7 +113,7 @@ var testMissingHost1 = function (next) {
   console.log('testMissingHost1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1.host = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingHost1 success')
       _successCount++
@@ -133,7 +134,7 @@ var testMissingHost2 = function (next) {
   console.log('testMissingHost2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2.host = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingHost2 success')
       _successCount++
@@ -154,7 +155,7 @@ var testMissingUser1 = function (next) {
   console.log('testMissingUser1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1.user = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingUser1 success')
       _successCount++
@@ -175,7 +176,7 @@ var testMissingUser2 = function (next) {
   console.log('testMissingUser2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2.user = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingUser2 success')
       _successCount++
@@ -196,7 +197,7 @@ var testMissingPassword1 = function (next) {
   console.log('testMissingPassword1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1.password = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingPassword1 success')
       _successCount++
@@ -217,7 +218,7 @@ var testMissingPassword2 = function (next) {
   console.log('testMissingPassword2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2.password = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingPassword2 success')
       _successCount++
@@ -238,7 +239,7 @@ var testMissingDatabase1 = function (next) {
   console.log('testMissingDatabase1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1.database = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingDatabase1 success')
       _successCount++
@@ -259,7 +260,7 @@ var testMissingDatabase2 = function (next) {
   console.log('testMissingDatabase2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2.database = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingDatabase2 success')
       _successCount++
@@ -280,7 +281,7 @@ var testMissingSchema = function (next) {
   console.log('testMissingSchema executing')
   var _config = tools.object.clone(configTemplate)
   _config.compare.schema = null
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testMissingSchema success')
       _successCount++
@@ -301,7 +302,7 @@ var testWrongConnection1 = function (next) {
   console.log('testWrongConnection1 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection1.password = 'xxx'
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testWrongConnection1 success')
       _successCount++
@@ -322,7 +323,7 @@ var testWrongConnection2 = function (next) {
   console.log('testWrongConnection2 executing')
   var _config = tools.object.clone(configTemplate)
   _config.connection2.password = 'xxx'
-  dbCompare.run(JSON.stringify(_config), function (err) {
+  compare.run(JSON.stringify(_config), function (err) {
     if (err) {
       console.log('testWrongConnection2 success')
       _successCount++
@@ -413,10 +414,10 @@ var _deltaCompare = function (prm, callback) {
               // / close db2 connection
               _db2.end()
               // / compare 2 databases
-              dbCompare.run(JSON.stringify(_config), function (err) {
+              compare.run(JSON.stringify(_config), function (err) {
                 if (!err) {
                   // / retrieve delta sql
-                  var _differences = dbCompare.getDeltaDifference(prm.deltaKey)
+                  var _differences = compare.getDeltaDifference(prm.deltaKey)
                   // / compare delta sql with the expected one
                   if (_differences.join('') === prm.sqlDifference) {
                     callback && callback(false)
@@ -469,13 +470,14 @@ var testTableCompareSuccess = function (next) {
  */
 var testTableCompareMissingTable = function (next) {
   console.log('testTableCompareMissingTable executing')
+  var _owner = configTemplate.compare.options.owner ? configTemplate.compare.options.owner : configTemplate.connection2.user
   _deltaCompare({
     sql1: 'CREATE TABLE users (id SERIAL NOT NULL, name VARCHAR NOT NULL);\n' +
       "COMMENT ON table users IS 'users';\n" +
       "COMMENT ON column users.name IS 'name'",
     sql2: 'CREATE TABLE factories (id SERIAL NOT NULL, name VARCHAR NOT NULL);\n',
     sqlDifference: 'CREATE TABLE users (\nid serial NOT NULL,name varchar NOT NULL\n);\n' +
-      'ALTER TABLE users OWNER TO ' + configTemplate.compare.options.owner + ';\n' +
+      'ALTER TABLE users OWNER TO ' + _owner + ';\n' +
       "COMMENT ON TABLE users IS 'users';\n" +
       "COMMENT ON COLUMN users.name IS 'name';\n",
     schema: {
@@ -1397,10 +1399,11 @@ var testFunctionCompareSuccess = function (next) {
  */
 var testFunctionCompareMissing = function (next) {
   console.log('testFunctionCompareSuccess executing')
+  var _owner = configTemplate.compare.options.owner ? configTemplate.compare.options.owner : configTemplate.connection2.user
   _deltaCompare({
     sql1: "CREATE FUNCTION func(message text) RETURNS varchar AS $BODY$ return 'Hello world'; $BODY$ LANGUAGE plv8 VOLATILE;",
     sql2: '',
-    sqlDifference: "CREATE OR REPLACE FUNCTION public.func(message text)\n RETURNS character varying\n LANGUAGE plv8\nAS $function$ return 'Hello world'; $function$\n;\nALTER FUNCTION func(message text) OWNER TO " + configTemplate.compare.options.owner + ';',
+    sqlDifference: "CREATE OR REPLACE FUNCTION public.func(message text)\n RETURNS character varying\n LANGUAGE plv8\nAS $function$ return 'Hello world'; $function$\n;\nALTER FUNCTION func(message text) OWNER TO " + _owner + ';',
     schema: {
       functions: true
     },
@@ -1651,10 +1654,11 @@ var testTypeCompareSuccess = function (next) {
  */
 var testTypeCompareMissing = function (next) {
   console.log('testTypeCompareMissing executing')
+  var _owner = configTemplate.compare.options.owner ? configTemplate.compare.options.owner : configTemplate.connection2.user
   _deltaCompare({
     sql1: "CREATE TYPE fruit AS ENUM ('BANANA','APPLE','PEACH','PINEAPPLE'); \n",
     sql2: '',
-    sqlDifference: "CREATE TYPE fruit AS ENUM ('BANANA','APPLE','PEACH','PINEAPPLE');\nALTER TYPE fruit OWNER TO " + configTemplate.compare.options.owner + ';',
+    sqlDifference: "CREATE TYPE fruit AS ENUM ('BANANA','APPLE','PEACH','PINEAPPLE');\nALTER TYPE fruit OWNER TO " + _owner + ';',
     schema: {
       types: true
     },
@@ -1788,10 +1792,11 @@ var testViewsCompareSuccess = function (next) {
  */
 var testViewsCompareMissing = function (next) {
   console.log('testViewsCompareMissing executing')
+  var _owner = configTemplate.compare.options.owner ? configTemplate.compare.options.owner : configTemplate.connection2.user
   _deltaCompare({
     sql1: "CREATE VIEW vw AS SELECT 'pippo' AS name, 1 AS id \n",
     sql2: '',
-    sqlDifference: "CREATE VIEW vw AS\n SELECT 'pippo' AS name,\n    1 AS id;;\nALTER TABLE vw OWNER TO " + configTemplate.compare.options.owner + ';',
+    sqlDifference: "CREATE VIEW vw AS\n SELECT 'pippo' AS name,\n    1 AS id;;\nALTER TABLE vw OWNER TO " + _owner + ';',
     schema: {
       views: true
     },
@@ -1923,26 +1928,7 @@ var testSequencesCompareWrongValue = function (next) {
   })
 }
 
-/**
- * Cycle test functions array and execute each function
- * @function
- * @param {Array.<function>} testFunctions Array of test functions to execute
- * @param {function} callback Callback function
- */
-var executeTest = function (testFunctions, callback) {
-  var _exe = function (i) {
-    testFunctions[i](function () {
-      if (testFunctions[i + 1]) {
-        _exe(i + 1)
-      } else {
-        callback && callback()
-      }
-    })
-  }
-  _exe(0)
-}
-
-var runTests = (function () {
+var runTests = function () {
   // / array with all test functions to execute
   var _tests = [
     testWrongJson,
@@ -2011,11 +1997,14 @@ var runTests = (function () {
     testSequencesCompareSuccess,
     testSequencesCompareWrongValue
   ]
+
   // / execute all tests
-  executeTest(_tests, function () {
+  async.series(_tests, function () {
     console.log('Test eseguiti: ', _tests.length, '\n')
     console.log('Test con successo: ', _successCount, '\n')
     console.log('Test con errore: ', _errorCount, '\n')
     process.exit(0)
   })
-}())
+}
+
+runTests()
