@@ -24,6 +24,10 @@ $ pg-compare [PATH_TO_CONFIG]
 ```
 where *PATH_TO_CONFIG* is the config file path (with all DBs parameters).
 
+## What's new
+
+**v. 0.1.1**: has been developed the possibility to compare data rows in tables to generate insert or delete queries
+
 ## How it works
 
 You just need to prepare a correct config json with all dbs parameters and then run this module: it will generate all SQL commands for the requested parameters.  
