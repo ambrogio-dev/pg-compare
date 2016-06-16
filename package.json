@@ -1,37 +1,50 @@
 {
-    "name": "pg-compare",
-    "version": "0.1.0",
-    "description": "PostgreSQL DDL comparing tool",
-    "keywords": ["pg", "delta", "diff", "ddl", "compare"],
-    "url": "http://github.com/ambrogio-dev/pg-compare",
-    "author": "Simone Sanfratello <simone.sanfra@gmail.com>",
-    "contributors": [{
+  "name": "pg-compare",
+  "version": "0.2.0",
+  "description": "PostgreSQL DDL comparing tool",
+  "keywords": [
+    "pg",
+    "delta",
+    "diff",
+    "ddl",
+    "compare"
+  ],
+  "url": "http://github.com/ambrogio-dev/pg-compare",
+  "author": "Simone Sanfratello <simone.sanfra@gmail.com>",
+  "contributors": [
+    {
       "name": "Andrea Latini",
       "email": "superlat@hotmail.it"
-    }],
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/ambrogio-dev/pg-compare.git"
-    },
-    "engines": {
-        "node": ">= 0.12.x"
-    },
-    "files": ["bin/main.js", "example.json", "test.js", "lib/"],
-    "dependencies": {
-        "pg": "x",
-        "a-toolbox": "x",
-        "async": "x",
-        "orchestrator": "x"
-    },
-    "devDependencies": {
-      "istanbul": "x"
-    },
-    "bin": {
-        "pg-compare": "./bin/main.js"
-    },    
-    "scripts": {
-      "test": "node test.js"
-    },
-    "preferGlobal": true
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ambrogio-dev/pg-compare.git"
+  },
+  "engines": {
+    "node": ">= 0.12.x"
+  },
+  "files": [
+    "bin/main.js",
+    "example.json",
+    "test.js",
+    "lib/"
+  ],
+  "dependencies": {
+    "pg": "x",
+    "a-toolbox": "x",
+    "async": "x",
+    "orchestrator": "x"
+  },
+  "devDependencies": {
+    "istanbul": "x"
+  },
+  "bin": {
+    "pg-compare": "./bin/main.js"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "preferGlobal": true
 }
