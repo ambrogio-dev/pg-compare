@@ -26,7 +26,8 @@ var configTemplate = {
       'indexes': true,
       'types': true,
       'views': true,
-      'sequences': true
+      'sequences': true,
+      'rows': ['users']
     },
     'options': {
       'mode': 'full',
@@ -1928,6 +1929,137 @@ var testSequencesCompareWrongValue = function (next) {
   })
 }
 
+/**
+ * Compare dbs: db1 and db2 have same rows
+ * @function
+ * @param {function} next Function to execute after finishing this test function
+ */
+var testRowsCompareSuccess = function (next) {
+  console.log('testRowsCompareSuccess executing')
+  _deltaCompare({
+    sql1: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', null, null, false);\n",
+    sql2: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', null, null, false);\n",
+    sqlDifference: '--rows match',
+    schema: {
+      'rows': ['users']
+    },
+    deltaKey: 'rows'
+  }, function (err) {
+    if (err) {
+      console.log('testRowsCompareSuccess error')
+      _errorCount++
+    } else {
+      console.log('testRowsCompareSuccess success')
+      _successCount++
+    }
+    next && next()
+  })
+}
+
+/**
+ * Compare dbs: db1 has some rows that db2 doesn't have
+ * @function
+ * @param {function} next Function to execute after finishing this test function
+ */
+var testRowsCompareInsert = function (next) {
+  console.log('testRowsInsert executing')
+  _deltaCompare({
+    sql1: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', null, null, false);\n",
+    sql2: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (3, 'pippo', null, null, false);\n",
+    sqlDifference: "ALTER TABLE users DISABLE trigger ALL;\n"+
+      "INSERT INTO users(id, name, time, obj, flag) VALUES ('1', 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', 'true');\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES ('2', 'user''s name', null, null, 'false');\n" +
+      "ALTER TABLE users ENABLE trigger ALL;",
+    schema: {
+      'rows': ['users']
+    },
+    deltaKey: 'rows'
+  }, function (err) {
+    if (err) {
+      console.log('testRowsInsert error')
+      _errorCount++
+    } else {
+      console.log('testRowsInsert success')
+      _successCount++
+    }
+    next && next()
+  })
+}
+
+/**
+ * Compare dbs: db1 and db2 has some rows with same pkey but different other column values
+ * @function
+ * @param {function} next Function to execute after finishing this test function
+ */
+var testRowsCompareDeleteInsert = function (next) {
+  console.log('testRowsDeleteInsert executing')
+  _deltaCompare({
+    sql1: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', '2016-01-24T10:45:44.566Z', '{\"a\":\"test2\"}', false);\n",
+    sql2: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pluto', null, null, false);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', '2016-01-24T10:45:44.566Z', '{\"a\":\"test2\"}', false);\n",
+    sqlDifference: "ALTER TABLE users DISABLE trigger ALL;\n"+
+      "DELETE FROM users WHERE id = '1';\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES ('1', 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', 'true');\n" +
+      "ALTER TABLE users ENABLE trigger ALL;",
+    schema: {
+      'rows': ['users']
+    },
+    deltaKey: 'rows'
+  }, function (err) {
+    if (err) {
+      console.log('testRowsDeleteInsert error')
+      _errorCount++
+    } else {
+      console.log('testRowsDeleteInsert success')
+      _successCount++
+    }
+    next && next()
+  })
+}
+
+/**
+ * Compare dbs: db2 has some rows not presents id db1
+ * @function
+ * @param {function} next Function to execute after finishing this test function
+ */
+var testRowsCompareDrop = function (next) {
+  console.log('testRowsDrop executing')
+  _deltaCompare({
+    sql1: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n",
+    sql2: 'CREATE TABLE users (id SERIAL NOT NULL PRIMARY KEY, name VARCHAR, time TIMESTAMP WITH TIME ZONE, obj jsonb, flag boolean);\n' +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (1, 'pippo', '2016-01-26T10:45:44.566Z', '{\"a\":\"test\"}', true);\n" +
+      "INSERT INTO users(id, name, time, obj, flag) VALUES (2, 'user''s name', '2016-01-24T10:45:44.566Z', '{\"a\":\"test2\"}', false);\n",
+    sqlDifference: "ALTER TABLE users DISABLE trigger ALL;\n"+
+      "DELETE FROM users WHERE id = '2';\n" +
+      "ALTER TABLE users ENABLE trigger ALL;",
+    full: true,
+    schema: {
+      'rows': ['users']
+    },
+    deltaKey: 'rows'
+  }, function (err) {
+    if (err) {
+      console.log('testRowsDrop error')
+      _errorCount++
+    } else {
+      console.log('testRowsDrop success')
+      _successCount++
+    }
+    next && next()
+  })
+}
+
 var runTests = function () {
   // / array with all test functions to execute
   var _tests = [
@@ -1995,7 +2127,11 @@ var runTests = function () {
     testViewsCompareWrongSource,
     testViewsCompareDrop,
     testSequencesCompareSuccess,
-    testSequencesCompareWrongValue
+    testSequencesCompareWrongValue,
+    testRowsCompareSuccess,
+    testRowsCompareInsert,
+    testRowsCompareDeleteInsert,
+    testRowsCompareDrop
   ]
 
   // / execute all tests

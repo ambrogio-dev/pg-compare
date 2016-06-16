@@ -60,6 +60,7 @@ The right format of the config file is the one shown in the example.json file.
   - `types` Flag to enable enum types comparing 
   - `views` Flag to enable views comparing
   - `sequences` Flag to enable current value comparing for sequences (a sequence must exist on both databases)
+  - `rows` Array of table names; for these there will be a rows comparison
 - `options` Comparing options  
 
   - `mode` (**full** or **preserve**) If *full* check which items of schema2 are not present in schema1 and generate SQL commands to drop them.

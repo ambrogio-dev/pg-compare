@@ -19,7 +19,8 @@
       "indexes": true, 
       "types": true, 
       "views": true,
-      "sequences": true
+      "sequences": true,
+      "rows": ["table1", "table2"]
     },
     "options": {
       "mode": "full",
