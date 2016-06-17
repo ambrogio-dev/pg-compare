@@ -26,6 +26,7 @@ where *PATH_TO_CONFIG* is the config file path (with all DBs parameters).
 
 ## What's new
 
+**v. 0.1.1**: has been fixed a bug that for some tables duplicated column names in creating sql commands
 **v. 0.1.1**: has been developed the possibility to compare data rows in tables to generate insert or delete queries
 
 ## How it works
