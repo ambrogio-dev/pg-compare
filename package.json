@@ -1,6 +1,6 @@
 {
   "name": "pg-compare",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "PostgreSQL DDL comparing tool",
   "keywords": [
     "pg",
@@ -26,6 +26,7 @@
     "node": ">= 0.12.x"
   },
   "files": [
+    "main.js",
     "bin/main.js",
     "example.json",
     "test.js",
@@ -43,6 +44,7 @@
   "bin": {
     "pg-compare": "./bin/main.js"
   },
+  "main": "main",
   "scripts": {
     "test": "node test.js"
   },
