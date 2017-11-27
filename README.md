@@ -25,9 +25,10 @@ $ pg-compare [PATH_TO_CONFIG]
 where *PATH_TO_CONFIG* is the config file path (with all DBs parameters).
 
 ## What's new
-**v. 0.1.3**: introduced camelCase check for table names
-**v. 0.1.2**: has been fixed a bug that for some tables duplicated column names in creating sql commands  
-**v. 0.1.1**: has been developed the possibility to compare data rows in tables to generate insert or delete queries
+**v. 0.2.0**: Smashed some bugs-
+**v. 0.1.3**: Introduced camelCase check for table names
+**v. 0.1.2**: Fixed a bug that for some tables duplicated column names in creating sql commands  
+**v. 0.1.1**: Added the possibility to compare data rows in tables to generate insert or delete queries
 
 ## How it works
 
