@@ -10,11 +10,15 @@
     "compare"
   ],
   "url": "http://github.com/ambrogio-dev/pg-compare",
-  "author": "Simone Sanfratello <simone.sanfra@gmail.com>",
+  "author": "Ambrogio Srl",
   "contributors": [
     {
       "name": "Andrea Latini",
       "email": "superlat@hotmail.it"
+    },
+    {
+      "name": "Alessandro Marzoli",
+      "email": "alessandromarzoli@gmail.com"
     }
   ],
   "license": "MIT",
